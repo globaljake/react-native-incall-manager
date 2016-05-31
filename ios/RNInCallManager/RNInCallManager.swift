@@ -165,8 +165,25 @@ class RNInCallManager: NSObject, AVAudioPlayerDelegate {
 		}
 	
 		func setupWiredHeadsetListener() -> Void {
+			self.bridge.eventDispatcher.sendDeviceEventWithName("WiredHeadset", body: ["isPlugged": self.isHeadsetPluggedIn()])
 			NSNotificationCenter.defaultCenter().addObserver( self, selector: #selector(self.audioRouteChangeListener(_:)), name: AVAudioSessionRouteChangeNotification, object: nil)
 		}
+	
+	func checkAudioRoute(targetPortTypeArray: [String]) -> Bool {
+		if let currentRoute: AVAudioSessionRouteDescription = self.audioSession.currentRoute {
+			for _portDescription in currentRoute.outputs {
+				let portDescription: AVAudioSessionPortDescription = _portDescription as AVAudioSessionPortDescription
+				if targetPortTypeArray.contains(portDescription.portType) {
+					return true
+				}
+			}
+		}
+		return false
+	}
+	
+	func isHeadsetPluggedIn() -> Bool {
+		return self.checkAudioRoute([AVAudioSessionPortHeadphones, AVAudioSessionPortHeadsetMic])
+	}
 
     func restoreOriginalAudioSetup() -> Void {
         print("restoreOriginalAudioSetup()")
