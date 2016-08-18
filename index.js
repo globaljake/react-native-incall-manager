@@ -44,6 +44,10 @@ class InCallManager {
     turnScreenOn() {
         _InCallManager.turnScreenOn();
     }
+    
+    setUpHeadsetDetect() {
+        _InCallManager.setUpHeadsetDetect();
+    }
 
     setKeepScreenOn(enable) {
         enable = (enable === true) ? true : false;

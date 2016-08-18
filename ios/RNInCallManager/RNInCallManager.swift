@@ -143,7 +143,8 @@ class RNInCallManager: NSObject, AVAudioPlayerDelegate {
     @objc func turnScreenOff() -> Void {
         NSLog("RNInCallManager.turnScreenOff(): ios doesn't support turnScreenOff()")
     }
-    @objc func setUpHeadphone() -> Void {
+    @objc func setUpHeadsetDetect() -> Void {
+      NSLog("JAKE setUpHeadsetDetect!!!");
         self.setupWiredHeadsetListener();
     }
 
@@ -287,9 +288,9 @@ class RNInCallManager: NSObject, AVAudioPlayerDelegate {
 
 			switch audioRouteChangeReason {
 				case AVAudioSessionRouteChangeReason.NewDeviceAvailable.rawValue:
-					self.bridge.eventDispatcher.sendDeviceEventWithName("Headset", body: ["isPlugged": true])
+					self.bridge.eventDispatcher.sendDeviceEventWithName("HeadsetDetect", body: ["isPlugged": true])
 				case AVAudioSessionRouteChangeReason.OldDeviceUnavailable.rawValue:
-					self.bridge.eventDispatcher.sendDeviceEventWithName("Headset", body: ["isPlugged": false])
+					self.bridge.eventDispatcher.sendDeviceEventWithName("HeadsetDetect", body: ["isPlugged": false])
 				default:
 					break
 			}
@@ -297,7 +298,7 @@ class RNInCallManager: NSObject, AVAudioPlayerDelegate {
 
 		func setupWiredHeadsetListener() -> Void {
       //Jake
-			self.bridge.eventDispatcher.sendDeviceEventWithName("Headset", body: ["isPlugged": self.isHeadsetPluggedIn()])
+			self.bridge.eventDispatcher.sendDeviceEventWithName("HeadsetDetect", body: ["isPlugged": self.isHeadsetPluggedIn()])
 			NSNotificationCenter.defaultCenter().addObserver( self, selector: #selector(self.audioRouteChangeListener(_:)), name: AVAudioSessionRouteChangeNotification, object: nil)
 		}
 
