@@ -28,6 +28,7 @@ class RNInCallManager: NSObject, AVAudioPlayerDelegate {
 
     var isProximitySupported: Bool = false
     var proximityIsNear: Bool = false
+    var setUpHeadsetDetectStart: Bool = false
 
     // --- tags to indicating which observer has added
     var isProximityRegistered: Bool = false
@@ -145,7 +146,10 @@ class RNInCallManager: NSObject, AVAudioPlayerDelegate {
     }
     @objc func setUpHeadsetDetect() -> Void {
       NSLog("JAKE setUpHeadsetDetect!!!");
-      self.setupWiredHeadsetListener();
+      if(!setUpHeadsetDetectStart) {
+        setUpHeadsetDetectStart = true;
+        self.setupWiredHeadsetListener();
+      }
     }
 
     func updateAudioRoute() -> Void {
