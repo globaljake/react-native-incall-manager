@@ -145,11 +145,8 @@ class RNInCallManager: NSObject, AVAudioPlayerDelegate {
         NSLog("RNInCallManager.turnScreenOff(): ios doesn't support turnScreenOff()")
     }
     @objc func setUpHeadsetDetect() -> Void {
-      NSLog("JAKE setUpHeadsetDetect!!!");
-      if(!setUpHeadsetDetectStart) {
-        setUpHeadsetDetectStart = true;
-        self.setupWiredHeadsetListener();
-      }
+      // NSLog("JAKE setUpHeadsetDetect!!!");
+      self.setupWiredHeadsetListener();
     }
 
     func updateAudioRoute() -> Void {
@@ -302,8 +299,11 @@ class RNInCallManager: NSObject, AVAudioPlayerDelegate {
 
 		func setupWiredHeadsetListener() -> Void {
       //Jake
-			self.bridge.eventDispatcher().sendDeviceEventWithName("HeadsetDetect", body: ["isPlugged": self.isHeadsetPluggedIn()])
-			NSNotificationCenter.defaultCenter().addObserver( self, selector: #selector(self.audioRouteChangeListener(_:)), name: AVAudioSessionRouteChangeNotification, object: nil)
+			self.bridge.eventDispatcher().sendDeviceEventWithName("HeadsetDetect", body: ["isPlugged": self.isHeadsetPluggedIn()]);
+      if(!setUpHeadsetDetectStart) {
+        setUpHeadsetDetectStart = true;
+        NSNotificationCenter.defaultCenter().addObserver( self, selector: #selector(self.audioRouteChangeListener(_:)), name: AVAudioSessionRouteChangeNotification, object: nil)
+      }
 		}
 
 	func checkAudioRoute(targetPortTypeArray: [String]) -> Bool {
